@@ -24,7 +24,7 @@ Prerequisites: Ubuntu 22.04 (Humble) or 20.04, ROS 2, and PCL Library.
 Workspace Setup: Clone the repository into your ```~/ros2_ws/src``` folder.
 
 Build: 
-    ```colcon build --symlink-install``
+    ```colcon build --symlink-install```
 
 Optimized Build : 
     ```colcon build --symlin-install --parallel-workers 2``` to save RAM.
