@@ -17,7 +17,7 @@ city_analyzer_ros/
 ├── launch/                # Launch scripts for automation
 └── rviz/                  # Pre-configured RViz display settings
 
-### Installation & Compilation
+### **Installation & Compilation**
 
 1. Clone the repository into your ROS2 workspace:
 
