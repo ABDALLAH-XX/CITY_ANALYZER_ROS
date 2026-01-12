@@ -23,14 +23,18 @@ city_analyzer_ros/
 
     -Workspace Setup: Clone the repository into your ```~/ros2_ws/src``` folder.
 
-    -Build: ```colcon build --symlink-install``
+    -Build: 
+        ```colcon build --symlink-install``
 
-    -Optimized Build : ```colcon build --symlin-install --parallel-workers 2``` to save RAM.
+    -Optimized Build : 
+        ```colcon build --symlin-install --parallel-workers 2``` to save RAM.
 
-    -Environment: Source the setup file with source install/setup.bash after building.
+    -Environment: Source the setup file after building with 
+        ```source install/setup.bash```
 
 ## Run
-    Full Pipeline: Launch the node and RViz2 using ```ros2 launch city_analyzer_ros city_visualizer.launch.py```
+    Launch the node and RViz2 using :
+        ```ros2 launch city_analyzer_ros city_visualizer.launch.py```
 
 ## Configuration
     Fine-tune the processing thresholds in main.cpp or the launch file:
