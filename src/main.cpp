@@ -18,15 +18,15 @@ class CityAnalyzerNode : public rclcpp::Node
 public:
     CityAnalyzerNode() : Node("city_analyzer_node")
     {
-        // 1. Déclaration des paramètres (plus simple à modifier via launch file)
+        // 1. Parameters declaration
         this->declare_parameter("voxel_leaf_size", 0.7); // Augmenté pour la fluidité
         this->declare_parameter("file_path", "/home/abdallah/Bureau/PointCloud/data/Lille_1.ply");
         this->declare_parameter("normal_radius", 1.2);
         this->declare_parameter("ground_distance_threshold", 0.15);
 
-        // 2. Initialisation des Publishers
+        // 2. Publishers setup
 
-        // QoS compatible avec RViz
+        // QoS configuration
         auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable().durability_volatile();
 
 
@@ -43,10 +43,10 @@ public:
 
         std::string path = this->get_parameter("file_path").as_string();
         
-        RCLCPP_INFO(this->get_logger(), "Tentative de chargement : %s", path.c_str());
+        RCLCPP_INFO(this->get_logger(), "Loading attempt : %s", path.c_str());
         
         if (analyzer_->loadCityFile(path)) {
-            RCLCPP_INFO(this->get_logger(), "Fichier chargé avec succès. En attente du spin...");
+            RCLCPP_INFO(this->get_logger(), "File loaded successfully. Waiting for spin...");
             startup_timer_ = this->create_wall_timer(
                 std::chrono::milliseconds(1000),
                 std::bind(&CityAnalyzerNode::process_and_publish, this));
@@ -59,14 +59,14 @@ private:
     void process_and_publish() {
         startup_timer_->cancel();
 
-        // A. Préparation et Filtrage
+        // A. Processing and filtering
         analyzer_->prepareData("gps_time");
         double leaf = this->get_parameter("voxel_leaf_size").as_double();
         analyzer_->applyVoxelFilter(leaf);
 
         analyzer_->filterByRange("z", -3.0f, 5.0f);
 
-        // Publication du nuage filtré
+        // Publishing filtered cloud
         auto full_cloud = analyzer_->getVisuCloud();
         sensor_msgs::msg::PointCloud2 cloud_msg;
         pcl::toROSMsg(*full_cloud, cloud_msg);
@@ -75,24 +75,24 @@ private:
         publisher_cloud_->publish(cloud_msg);
         
         
-        // B. Segmentation Sol/Objets
+        // B. Ground/Objects segmentation
         auto ground_pcl = std::make_shared<CityAnalyzer::VisuCloudT>();
         auto objects_pcl = std::make_shared<CityAnalyzer::VisuCloudT>();
         analyzer_->extractGroundAndObjects(ground_pcl, objects_pcl);
         
         publish_segmented_clouds(ground_pcl, objects_pcl);
 
-        // C. Clustering (Détection des objets individuels)
+        // C. Clustering (Objects detection)
         std::vector<CityAnalyzer::VisuCloudT::Ptr> clusters;
         analyzer_->extractClusters(objects_pcl, clusters);
 
-        // D. Création du nuage coloré et des Bounding Boxes (Séquentiel pour la stabilité)
+        // D. Bounding Boxes and Coloring
         auto colored_cloud = std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>();
         colored_cloud->reserve(objects_pcl->size());
 
         visualization_msgs::msg::MarkerArray bbox_markers;
         
-        std::mt19937 gen(42); // Seed fixe pour avoir les mêmes couleurs à chaque lancement
+        std::mt19937 gen(42); // fixed seed for reproducibility
         std::uniform_int_distribution<uint8_t> dis(50, 255);
 
         auto current_time = this->now();
@@ -100,7 +100,7 @@ private:
         for (size_t i = 0; i < clusters.size(); ++i) {
             uint8_t r = dis(gen), g = dis(gen), b = dis(gen);
 
-            // Coloration des points du cluster
+            // Cloud point coloring
             for (auto& pt : clusters[i]->points) {
                 pcl::PointXYZRGB p;
                 p.x = pt.x; p.y = pt.y; p.z = pt.z;
@@ -108,7 +108,7 @@ private:
                 colored_cloud->push_back(p);
             }
 
-            // Calcul de la Bounding Box
+            // Bounding box computation
             auto box = analyzer_->computeClusterBBox(clusters[i]);
             
             visualization_msgs::msg::Marker marker;
@@ -119,17 +119,17 @@ private:
             marker.type = visualization_msgs::msg::Marker::CUBE;
             marker.action = visualization_msgs::msg::Marker::ADD;
 
-            // Centre de la boîte
+            // Box center position
             marker.pose.position.x = (box.minX + box.maxX) / 2.0;
             marker.pose.position.y = (box.minY + box.maxY) / 2.0;
             marker.pose.position.z = (box.minZ + box.maxZ) / 2.0;
 
-            // Dimensions (avec sécurité mini de 0.1m)
+            // Dimensions (with minimum size to ensure visibility)
             marker.scale.x = std::max(0.1f, box.maxX - box.minX);
             marker.scale.y = std::max(0.1f, box.maxY - box.minY);
             marker.scale.z = std::max(0.1f, box.maxZ - box.minZ);
 
-            // Couleur assortie au cluster avec transparence
+            // Colors matching the cluster coloring with some transparency
             marker.color.r = r / 255.0f;
             marker.color.g = g / 255.0f;
             marker.color.b = b / 255.0f;
@@ -138,7 +138,7 @@ private:
             bbox_markers.markers.push_back(marker);
         }
 
-        // E. Publication des résultats
+        // E. Publishing clusters and bounding boxes
         colored_cloud->width = colored_cloud->size();
         colored_cloud->height = 1;
         colored_cloud->is_dense = true;
@@ -150,12 +150,12 @@ private:
         publisher_clusters_->publish(cluster_msg);
         publisher_bboxes_->publish(bbox_markers);
 
-        // F. Normales (Désactivable si trop lent)
+        // F. Normals computation and publishing
         double radius = this->get_parameter("normal_radius").as_double();
         analyzer_->computeNormals(radius);
         publish_normals_as_markers();
         
-        RCLCPP_INFO(this->get_logger(), "Traitement terminé : %ld objets trouvés.", clusters.size());
+        RCLCPP_INFO(this->get_logger(), "Processing done : %ld objects found.", clusters.size());
         
     }
 
@@ -180,7 +180,7 @@ private:
         if(normals->empty()) return;
 
         visualization_msgs::msg::MarkerArray marker_array;
-        int step = 100; // Afficher 1 normale sur 100 pour la performance
+        int step = 100; // Display every 100th normal for clarity
         
         for (size_t i = 0; i < cloud->size(); i += step) {
             if (std::isnan(normals->points[i].normal_x)) continue;
