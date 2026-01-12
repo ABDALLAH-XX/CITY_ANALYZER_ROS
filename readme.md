@@ -16,3 +16,11 @@ city_analyzer_ros/
 ├── src/                   # C++ Source code (PCL & ROS 2)
 ├── launch/                # Launch scripts for automation
 └── rviz/                  # Pre-configured RViz display settings
+
+## Installation & Compilation
+
+1. Clone the repository into your ROS2 workspace:
+
+```bash
+cd ~/ros2_ws/src
+git clone https://github.com/YOUR_USERNAME/CITY_ANALYZER_ROS.git
