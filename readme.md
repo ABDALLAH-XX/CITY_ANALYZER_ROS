@@ -2,7 +2,7 @@
 
 A high-performance ROS 2 package for semantic analysis and segmentation of 3D urban point clouds (Lidar/PLY).
 
-## 🚀 Features
+## Features
 - **Preprocessing**: Voxel Grid filtering to optimize RAM usage and processing speed.
 - **Ground Segmentation**: Road plane extraction using the RANSAC algorithm.
 - **Object Extraction**: Isolation of non-ground elements (buildings, vehicles, street furniture).
@@ -16,11 +16,27 @@ city_analyzer_ros/
 ├── src/                   # C++ Source code (PCL & ROS 2)
 ├── launch/                # Launch scripts for automation
 └── rviz/                  # Pre-configured RViz display settings
+```
+## Installation & Build
 
-### **Installation & Compilation**
+    -Prerequisites: Ubuntu 22.04 (Humble) or 20.04, ROS 2, and PCL Library.
 
-1. Clone the repository into your ROS2 workspace:
+    -Workspace Setup: Clone the repository into your ```~/ros2_ws/src``` folder.
 
-```bash
-cd ~/ros2_ws/src
-git clone https://github.com/YOUR_USERNAME/CITY_ANALYZER_ROS.git
+    -Build: ```colcon build --symlink-install``
+
+    -Optimized Build : ```colcon build --symlin-install --parallel-workers 2``` to save RAM.
+
+    -Environment: Source the setup file with source install/setup.bash after building.
+
+## Run
+    Full Pipeline: Launch the node and RViz2 using ```ros2 launch city_analyzer_ros city_visualizer.launch.py```
+
+## Configuration
+    Fine-tune the processing thresholds in main.cpp or the launch file:
+
+        -voxel_leaf_size: Downsampling resolution (default: 0.2m).
+
+        -distance_threshold: RANSAC tolerance for plane detection (default: 0.15m).
+
+        -cluster_tolerance: Distance between points to form a cluster (default: 0.5m).
