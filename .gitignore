@@ -1,0 +1,28 @@
+# Fichiers de build ROS2
+build/
+install/
+log/
+
+# Fichiers temporaires
+*.pyc
+*.pyo
+*.swp
+*.swo
+*.DS_Store
+
+# Fichiers de configuration de l'éditeur
+.vscode/
+.idea/
+*.iml
+
+# Exemples de caches
+*.egg-info/
+*.egg
+*.log
+
+# Rviz et autres fichiers générés par l’utilisateur (optionnel)
+*.rviz
+*.db
+
+# Ignorer instruction.txt
+instruction.txt
