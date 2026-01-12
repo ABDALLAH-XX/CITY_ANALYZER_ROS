@@ -16,8 +16,8 @@ city_analyzer_ros/
 ├── src/                   # C++ Source code (PCL & ROS 2)
 ├── launch/                # Launch scripts for automation
 └── rviz/                  # Pre-configured RViz display settings
-'''text
-## Installation & Build
+
+Installation & Build
 1. Prerequisites
 
     OS: Ubuntu 22.04 (Humble) or 20.04 (Foxy/Galactic)
