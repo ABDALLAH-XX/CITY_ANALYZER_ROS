@@ -19,9 +19,9 @@ city_analyzer_ros/
 ```
 ## Installation & Build
 
-    -Prerequisites: Ubuntu 22.04 (Humble) or 20.04, ROS 2, and PCL Library.
+Prerequisites: Ubuntu 22.04 (Humble) or 20.04, ROS 2, and PCL Library.
 
-    -Workspace Setup: Clone the repository into your ```~/ros2_ws/src``` folder.
+Workspace Setup: Clone the repository into your ```~/ros2_ws/src``` folder.
 
     -Build: 
         ```colcon build --symlink-install``
@@ -33,14 +33,14 @@ city_analyzer_ros/
         ```source install/setup.bash```
 
 ## Run
-    Launch the node and RViz2 using :
+Launch the node and RViz2 using :
         ```ros2 launch city_analyzer_ros city_visualizer.launch.py```
 
 ## Configuration
-    Fine-tune the processing thresholds in main.cpp or the launch file:
+Fine-tune the processing thresholds in main.cpp or the launch file:
 
-        -voxel_leaf_size: Downsampling resolution (default: 0.2m).
+    -voxel_leaf_size: Downsampling resolution (default: 0.2m).
 
-        -distance_threshold: RANSAC tolerance for plane detection (default: 0.15m).
+    -distance_threshold: RANSAC tolerance for plane detection (default: 0.15m).
 
-        -cluster_tolerance: Distance between points to form a cluster (default: 0.5m).
+    -cluster_tolerance: Distance between points to form a cluster (default: 0.5m).
