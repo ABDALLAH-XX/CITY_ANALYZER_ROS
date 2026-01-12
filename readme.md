@@ -23,14 +23,14 @@ Prerequisites: Ubuntu 22.04 (Humble) or 20.04, ROS 2, and PCL Library.
 
 Workspace Setup: Clone the repository into your ```~/ros2_ws/src``` folder.
 
-    -Build: 
-        ```colcon build --symlink-install``
+Build: 
+    ```colcon build --symlink-install``
 
-    -Optimized Build : 
-        ```colcon build --symlin-install --parallel-workers 2``` to save RAM.
+Optimized Build : 
+    ```colcon build --symlin-install --parallel-workers 2``` to save RAM.
 
-    -Environment: Source the setup file after building with 
-        ```source install/setup.bash```
+Environment: Source the setup file after building with 
+    ```source install/setup.bash```
 
 ## Run
 Launch the node and RViz2 using :
