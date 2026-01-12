@@ -1,28 +1,21 @@
-cat > README.md <<EOL
-# CITY_ANALYZER_ROS
+# City Analyzer ROS 2
 
-Un package ROS2 pour analyser et visualiser des données urbaines en 3D.
+A high-performance ROS 2 package for semantic analysis and segmentation of 3D urban point clouds (Lidar/PLY).
 
-## Structure du projet
+## 🚀 Features
+- **Preprocessing**: Voxel Grid filtering to optimize RAM usage and processing speed.
+- **Ground Segmentation**: Road plane extraction using the RANSAC algorithm.
+- **Object Extraction**: Isolation of non-ground elements (buildings, vehicles, street furniture).
+- **Real-time Optimization**: Asynchronous timers and QoS (Best Effort) policies for smooth visualization in RViz2.
 
-\`\`\`
-city_analyzer/
-│
-├─ data/                  
-├─ include/city_analyzer_ros/  
-│   └─ CityAnalyzer.hpp
-├─ launch/
-│   └─ city_visualizer.launch.py
-├─ rviz/
-│   └─ city_view.rviz
-├─ src/
-│   ├─ CityAnalyzer.cpp
-│   └─ main.cpp
-├─ CMakeLists.txt
-├─ package.xml
-├─ LICENSE
-└─ .gitignore
-\`\`\`
+## 📁 Project Structure
+```text
+city_analyzer_ros/
+├── data/                  # PLY files (e.g., Lille_1.ply)
+├── include/               # Header files (.hpp)
+├── src/                   # C++ Source code (PCL & ROS 2)
+├── launch/                # Launch scripts for automation
+└── rviz/                  # Pre-configured RViz display settings
 
 ## Installation
 
