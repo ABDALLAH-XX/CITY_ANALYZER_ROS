@@ -4,7 +4,7 @@ A high-performance ROS 2 package for semantic analysis and segmentation of 3D ur
 
 ## Visualization
 ![RViz2 Point Cloud Segmentation](results.png)
-*Visualizing the segmented urban environment: Ground (green), Buildings/Obstacles (red), and Raw Cloud.*
+*Visualizing the segmented urban environment : 16 objects are found
 
 ## Features
 - **Preprocessing**: Voxel Grid filtering to optimize RAM usage and processing speed.
