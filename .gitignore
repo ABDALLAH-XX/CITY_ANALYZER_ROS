@@ -21,7 +21,6 @@ log/
 *.log
 
 # Rviz et autres fichiers générés par l’utilisateur (optionnel)
-*.rviz
 *.db
 
 # Ignorer instruction.txt
